@@ -1,6 +1,10 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 
 public class Course {
@@ -14,6 +18,7 @@ public class Course {
     private int coursePar;
     // Par values for the course holes
     private int[] courseParList;
+    
 
     // Preset pars for 9-hole and 18-hole courses
     private final int[] parList9 = {4, 4, 5, 4, 3, 4, 5, 3, 4};
@@ -69,7 +74,10 @@ public class Course {
             }
         }
     }
-
+    
+    public void drawCourse() {
+    	
+    }
     // Getters and setters
     public ArrayList<Hole> getHoles() {
         return holes;
