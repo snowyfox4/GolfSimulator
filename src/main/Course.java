@@ -1,95 +1,125 @@
 package main;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.ArrayList;
+
 public class Course {
-    ArrayList<Hole> holes;
-    Weather currentWeather;
-    int holeCount;
-    int coursePar;
-  
-    int[] parList9 = {4, 4, 5, 4, 3, 4, 5, 3, 4};
-    int[] parList18 = {4, 4, 5, 4, 3, 4, 5, 3, 4, 4, 4, 5, 4, 3, 4, 5, 3, 4};
-    int[] courseParList;
-  
-   public Course(int holeCount, Color dificulty) {
-   	this.holeCount = holeCount;
-   	int j;
-   	//Randomize Pars for 9 Holes
-   	if (holeCount == 9) {
-   		for (int i = 0; i < holeCount; i++) {
-   			j = (int)(Math.random()*9);
-   			courseParList[i] = parList9[j];
-   			coursePar+=parList9[j];
-   		}
-   	}
-   	//Randomize Pars for 18 Holes
-   	if (holeCount == 18) {
-   		for (int i = 0; i < holeCount; i++) {
-   			j = (int)(Math.random()*18);
-   			courseParList[i] = parList18[j];
-   			coursePar+=parList18[j];
-   		}
-   	}
-       currentWeather = new Weather();
-       holes = new ArrayList<Hole>(holeCount);
-       generateCourse();
-   }
-   public void generateCourse() {
-   	//Generate the course based on all the pars generated in the begining
-       for (int i = 0; i < holeCount; i++) {
-       	if (courseParList[i] == 3) {
-       		holes.add(new Hole(3, (int)(Math.random()*100 + 120)));
-       	}
-       	if (courseParList[i] == 4) {
-       		holes.add(new Hole(4, (int)(Math.random()*130 + 260)));
-       	}
-       	if (courseParList[i] == 5) {
-       		holes.add(new Hole(5, (int)(Math.random()*100 + 450)));
-       	}
-       }
-   
-   }
-  
-  
-   public ArrayList<Hole> getHoles() {
-		return holes;
-	}
-	public void setHoles(ArrayList<Hole> holes) {
-		this.holes = holes;
-	}
-	public Weather getCurrentWeather() {
-		return currentWeather;
-	}
-	public void setCurrentWeather(Weather currentWeather) {
-		this.currentWeather = currentWeather;
-	}
-	public int getHoleCount() {
-		return holeCount;
-	}
-	public void setHoleCount(int holeCount) {
-		this.holeCount = holeCount;
-	}
-	public int getCoursePar() {
-		return coursePar;
-	}
-	public void setCoursePar(int coursePar) {
-		this.coursePar = coursePar;
-	}
-	public int[] getCourseParList() {
-		return courseParList;
-	}
-	public void setCourseParList(int[] courseParList) {
-		this.courseParList = courseParList;
-	}
-	public int getTotalHoles() {
-       return holeCount;
-   }
-  
-   public int getPar() {
-   	return coursePar;
-   }
-   public Weather getWeather() {
-       return currentWeather;
-   }
+    // List of holes in this course
+    private ArrayList<Hole> holes;
+    // Current weather affecting the course
+    private Weather currentWeather;
+    // Number of holes (9 or 18)
+    private int holeCount;
+    // Total par for the course
+    private int coursePar;
+    // Par values for the course holes
+    private int[] courseParList;
+
+    // Preset pars for 9-hole and 18-hole courses
+    private final int[] parList9 = {4, 4, 5, 4, 3, 4, 5, 3, 4};
+    private final int[] parList18 = {4, 4, 5, 4, 3, 4, 5, 3, 4, 4, 4, 5, 4, 3, 4, 5, 3, 4};
+
+    /**
+     * Constructor to create a Course.
+     * Randomizes pars for each hole based on holeCount.
+     * @param holeCount Number of holes (9 or 18)
+     * @param difficulty (Currently unused) Color to represent course difficulty
+     */
+    public Course(int holeCount, Color difficulty) {
+        this.holeCount = holeCount;
+        this.coursePar = 0;
+        this.courseParList = new int[holeCount];
+        
+        // Randomly assign pars for each hole based on holeCount
+        if (holeCount == 9) {
+            for (int i = 0; i < holeCount; i++) {
+                int j = (int) (Math.random() * parList9.length);
+                courseParList[i] = parList9[j];
+                coursePar += parList9[j];
+            }
+        } else if (holeCount == 18) {
+            for (int i = 0; i < holeCount; i++) {
+                int j = (int) (Math.random() * parList18.length);
+                courseParList[i] = parList18[j];
+                coursePar += parList18[j];
+            }
+        }
+
+        currentWeather = new Weather();
+        holes = new ArrayList<>(holeCount);
+        generateCourse();
+    }
+
+    /**
+     * Generates holes based on the pars stored in courseParList.
+     * Assigns random distances to holes based on par.
+     */
+    public void generateCourse() {
+        for (int i = 0; i < holeCount; i++) {
+            int par = courseParList[i];
+            if (par == 3) {
+                // Par 3 hole, distance between 120 and 220 yards
+                holes.add(new Hole(3, (int) (Math.random() * 100 + 120)));
+            } else if (par == 4) {
+                // Par 4 hole, distance between 260 and 390 yards
+                holes.add(new Hole(4, (int) (Math.random() * 130 + 260)));
+            } else if (par == 5) {
+                // Par 5 hole, distance between 450 and 550 yards
+                holes.add(new Hole(5, (int) (Math.random() * 100 + 450)));
+            }
+        }
+    }
+
+    // Getters and setters
+    public ArrayList<Hole> getHoles() {
+        return holes;
+    }
+
+    public void setHoles(ArrayList<Hole> holes) {
+        this.holes = holes;
+    }
+
+    public Weather getCurrentWeather() {
+        return currentWeather;
+    }
+
+    public void setCurrentWeather(Weather currentWeather) {
+        this.currentWeather = currentWeather;
+    }
+
+    public int getHoleCount() {
+        return holeCount;
+    }
+
+    public void setHoleCount(int holeCount) {
+        this.holeCount = holeCount;
+    }
+
+    public int getCoursePar() {
+        return coursePar;
+    }
+
+    public void setCoursePar(int coursePar) {
+        this.coursePar = coursePar;
+    }
+
+    public int[] getCourseParList() {
+        return courseParList;
+    }
+
+    public void setCourseParList(int[] courseParList) {
+        this.courseParList = courseParList;
+    }
+
+    public int getTotalHoles() {
+        return holeCount;
+    }
+
+    public int getPar() {
+        return coursePar;
+    }
+
+    public Weather getWeather() {
+        return currentWeather;
+    }
 }
