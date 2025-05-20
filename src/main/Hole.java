@@ -59,6 +59,7 @@ public class Hole {
             g2d.fill(fairway);
             g2d.setColor(Color.BLACK);
             g2d.draw(fairway);
+            //Make Bunker and Obstacle 
            
             
 
