@@ -7,6 +7,7 @@ import java.awt.event.*;
 public class ControlPanel extends JPanel {
     private GolfGame game;
     private JButton nextShotButton;
+    private boolean mainScreen;
 
     public ControlPanel(GolfGame game) {
         this.game = game;
@@ -23,7 +24,11 @@ public class ControlPanel extends JPanel {
 
         //add(nextShotButton);
     }
-    public void mainScreen() {
-    	
+    
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (mainScreen) {
+        	
+        }
     }
 }
