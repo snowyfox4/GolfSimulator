@@ -31,8 +31,8 @@ public class GolfGame extends JFrame {
 
         setLayout(new BorderLayout());
         add(gamePanel, BorderLayout.CENTER);
-        add(controlPanel, BorderLayout.SOUTH);
-
+        //add(controlPanel, BorderLayout.SOUTH);
+        
         setVisible(true);
     }
 
