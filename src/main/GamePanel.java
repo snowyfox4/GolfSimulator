@@ -24,6 +24,7 @@ public class GamePanel extends JPanel {
         Hole hole = game.getCourse().getHoles().get(game.getCurrentHole());
         hole.drawFairway(g);
         hole.drawGreen(g);
+        
         g.setColor(Color.BLACK);
         g.drawString("Hole: " + (game.getCurrentHole() + 1), 20, 20);
         g.drawString("Par: " + hole.getPar(), 20, 40);

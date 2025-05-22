@@ -19,6 +19,8 @@ public class Course {
     // Par values for the course holes
     private int[] courseParList;
     
+    
+    
 
     // Preset pars for 9-hole and 18-hole courses
     private final int[] parList9 = {4, 4, 5, 4, 3, 4, 5, 3, 4};
@@ -64,13 +66,13 @@ public class Course {
             int par = courseParList[i];
             if (par == 3) {
                 // Par 3 hole, distance between 120 and 220 yards
-                holes.add(new Hole(3, (int) (Math.random() * 100 + 120)));
+                holes.add(new Hole(3, (int) (Math.random() * 100 + 120), currentWeather));
             } else if (par == 4) {
                 // Par 4 hole, distance between 260 and 390 yards
-                holes.add(new Hole(4, (int) (Math.random() * 130 + 260)));
+                holes.add(new Hole(4, (int) (Math.random() * 130 + 260), currentWeather));
             } else if (par == 5) {
                 // Par 5 hole, distance between 450 and 550 yards
-                holes.add(new Hole(5, (int) (Math.random() * 100 + 450)));
+                holes.add(new Hole(5, (int) (Math.random() * 100 + 450), currentWeather));
             }
         }
     }

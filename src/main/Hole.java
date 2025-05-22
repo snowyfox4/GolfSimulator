@@ -11,12 +11,24 @@ public class Hole {
     private int par;
     private int distance, width; // yards
     private ArrayList<Obstacle> obstacles;
+    private Weather weather;
+    private int fairwayLocationX;
+    private int fairwayLocationY;
+    
+    
+    private int greenLocationX;
+    private int greenLocationY;
+    
+    
+    private int flagLocationX;
+    private int flagLocationY;
 
-    public Hole(int par, int distance) {
+    public Hole(int par, int distance, Weather weather) {
         this.par = par;
         this.distance = distance;
         this.width = (int)Math.random()*30+30;
         obstacles = new ArrayList<>();
+        this.weather = weather;
         // Obstacles can be added later
     }
 
@@ -43,26 +55,24 @@ public class Hole {
             GeneralPath fairway = new GeneralPath();
 
             // Define fairway shape with curves
-            float startX = 100;
-            float startY = 100;
-            fairway.moveTo(startX, startY);
+            float fairwayLocationX = (float) (Math.random()*100);
+            float fairwayLocationY = (float) (Math.random()*100);
+            fairway.moveTo(fairwayLocationX, fairwayLocationY);
 
             //Use curveTo to create fairway curves
-            fairway.curveTo(startX + 50, startY - 50, startX + 150, startY - 50, startX + 200, startY);
-            fairway.curveTo(startX+200, startY, startX+300, startY+100, startX+250, startY+200);
-            fairway.curveTo(startX+250, startY+200, startX+175, startY+300, startX+300, startY+300);
-            fairway.curveTo(startX+300, startY+300, startX+450, startY+350, startX+250, startY+450);
-            fairway.curveTo(startX+250, startY+450, startX-100, startY+500, startX, startY);
+            fairway.curveTo(fairwayLocationX + 50, fairwayLocationY - 50, fairwayLocationX + 150, fairwayLocationY - 50, fairwayLocationX + 200, fairwayLocationY);
+            fairway.curveTo(fairwayLocationX+200, fairwayLocationY, fairwayLocationX+300, fairwayLocationY+100, fairwayLocationX+250, fairwayLocationY+200);
+            fairway.curveTo(fairwayLocationX+250, fairwayLocationY+200, fairwayLocationX+175, fairwayLocationY+300, fairwayLocationX+300, fairwayLocationY+300);
+            fairway.curveTo(fairwayLocationX+300, fairwayLocationY+300, fairwayLocationX+450, fairwayLocationY+350, fairwayLocationX+250, fairwayLocationY+450);
+            fairway.curveTo(fairwayLocationX+250, fairwayLocationY+450, fairwayLocationX-100, fairwayLocationY+500, fairwayLocationX, fairwayLocationY);
             
             // Draw and fill the fairway
             g2d.setColor(Color.GREEN);
             g2d.fill(fairway);
             g2d.setColor(Color.BLACK);
             g2d.draw(fairway);
+            weather.drawWeather(g);
             //Make Bunker and Obstacle 
-           
-            
-
     }
     
     public void drawGreen(Graphics g) {
@@ -82,11 +92,26 @@ public class Hole {
             g2d.draw(green);
             
     }
+    //Draw Flag
+    public void drawFlag(Graphics g) {
+    	
+    	
+    	g.setColor(Color.GRAY);
+    	g.drawLine(par, fairwayLocationY, fairwayLocationX, distance);
+    	//Direction 6  (0, 5), Change angle 0 - 45, 1 - 0, 2 - -45
+    	//Wind Speed Depends on the Radius
+    	//x = wscos(45) --Radians
+    	//(+)
+  
+    	
+    	//Change Color Depending on Location on Green
+    }
     
     //Changes depending on what tee box
     public void drawTeeBox(Graphics g) {
     		
     }
+
 
     public boolean isInHazard(Ball ball) {
         for (Obstacle o : obstacles) {
