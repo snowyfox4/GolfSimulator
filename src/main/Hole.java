@@ -65,11 +65,29 @@ public class Hole {
 	    float startX = (int) Math.random() * 1000;
 	    float startY = (int) Math.random() * 1000;
 	    fairway.moveTo(startX, startY);
-	    
+	    //Graphics2D g2d = (Graphics2D) g;
+
+        int x = (int)startX;
+        int y = (int)startY;
+        int width = 100;
+        int height = 500;
+        double angle = 300; // degrees
+        double centerX = x + width / 2.0;
+        double centerY = y + height / 2.0;
+
+        Rectangle2D rectangle = new Rectangle2D.Double(x, y, width, height);
+
+        g2d.rotate(Math.toRadians(angle), centerX, centerY);
+        g2d.draw(rectangle);
+        
+        
+        
+        
+        //g2d.rotate(-Math.toRadians(angle), centerX, centerY); // Reset rotation
 	    if (startX < 500) {
 	    	if (startY < 500) {
 	    		//Change random numbers
-	    		fairway.curveTo(startX, startY, startX + 500, startY + 500, startX + 600, startY + 600);
+	    		fairway.curveTo(startX, startY, startX + 300, startY + 300, startX + 600, startY + 600);
 	    		fairway.curveTo(startX + 600, startY + 600, startY + 400, startY + 400, startX + 300, startY + 300);
 	    		fairway.curveTo(startX + 300, startY + 300, startY , startY, startX, startY);
 	    	} else { 
@@ -206,61 +224,7 @@ public class Hole {
 	    g2d.dispose();
 	}
 
-	// Changes depending on what tee box
-	public void drawTeeBox(Graphics g) {
-		g.setColor(difficulty);
-		if (difficulty == Color.red) {
-			//Yardages from google
-			if (par == 3) {
-				distance = (int)(Math.random()*100 + 100);
-			}
-			if (par == 4) {
-				distance = (int)(Math.random()*220 + 200);
-			}
-			if (par == 5) {
-				distance = (int)(Math.random()*230 + 370);
-			}
-			// Find length, find about how long it should be compared to the length of the
-			// hole
-			g.drawRect(fairwayLocationY, fairwayLocationX, width, distance);
-		}
-		if (difficulty == Color.white) {
-			if (par == 3) {
-				distance = (int)(Math.random()*70 + 130);
-			}
-			if (par == 4) {
-				distance = (int)(Math.random()*140 + 300);
-			}
-			if (par == 5) {
-				distance = (int)(Math.random()*250 + 450);
-			}
-			g.drawRect(fairwayLocationY, fairwayLocationX, width, distance);
-		}
-		if (difficulty == Color.blue) {
-			if (par == 3) {
-				distance = (int)(Math.random()*220 + 200);
-			}
-			if (par == 4) {
-				distance = (int)(Math.random()*220 + 200);
-			}
-			if (par == 5) {
-				distance = (int)(Math.random()*220 + 200);
-			}
-			g.drawRect(fairwayLocationY, fairwayLocationX, width, distance);
-		}
-		if (difficulty == Color.black) {
-			if (par == 3) {
 
-			}
-			if (par == 4) {
-
-			}
-			if (par == 5) {
-
-			}
-			g.drawRect(fairwayLocationY, fairwayLocationX, width, distance);
-		}
-	}
 
 	public boolean isInHazard(Ball ball) {
 		for (Obstacle o : obstacles) {
