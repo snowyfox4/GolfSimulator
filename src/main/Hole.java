@@ -13,6 +13,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class Hole {
+	private Course course;
 	private int par;
 	private int distance, width; // yards
 	private ArrayList<Obstacle> obstacles;
@@ -31,11 +32,13 @@ public class Hole {
 
 	private Color difficulty;
 
-	public Hole(int par, Weather weather) {
+	public Hole(int par, int distance, Weather weather) {
+		this.distance = distance;
 		this.par = par;
 		this.width = (int) Math.random() * 30 + 30;
 		obstacles = new ArrayList<>();
 		this.weather = weather;
+		this.difficulty = Color.white;
 		// Obstacles can be added later
 	}
 
@@ -54,47 +57,46 @@ public class Hole {
 	public void drawFairway(Graphics g) {
 	    Graphics2D g2d = (Graphics2D) g.create();
 	    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
+	  
 	    // Parameters
-	    int fairwayLength = 400;
-	    float startX = 100f;
-	    float startY = 200f;
-
-	    // Random factors for shape variation
-	    float bulgeTop = 60f + (float)(Math.random() * 40);     // 60 to 100 px bulge top
-	    float bulgeBottom = 40f + (float)(Math.random() * 40);  // 40 to 80 px bulge bottom
-	    float widthHalf = 30f + (float)(Math.random() * 10);    // half width 30-40 px (skinnier)
-
+	    
 	    GeneralPath fairway = new GeneralPath();
+	    
+	    float startX = (int) Math.random() * 1000;
+	    float startY = (int) Math.random() * 1000;
 	    fairway.moveTo(startX, startY);
-
-	    // Top edge curves (3 segments)
-	    fairway.curveTo(startX + fairwayLength * 0.15f, startY - widthHalf,
-	                    startX + fairwayLength * 0.35f, startY - bulgeTop,
-	                    startX + fairwayLength * 0.5f, startY - bulgeTop / 1.5f);
-
-	    fairway.curveTo(startX + fairwayLength * 0.65f, startY - bulgeTop / 2,
-	                    startX + fairwayLength * 0.85f, startY - widthHalf,
-	                    startX + fairwayLength, startY);
-
-	    // Bottom edge curves (3 segments back)
-	    fairway.curveTo(startX + fairwayLength * 0.85f, startY + bulgeBottom / 2,
-	                    startX + fairwayLength * 0.65f, startY + bulgeBottom,
-	                    startX + fairwayLength * 0.5f, startY + bulgeBottom * 1.2f);
-
-	    fairway.curveTo(startX + fairwayLength * 0.35f, startY + bulgeBottom * 1.5f,
-	                    startX + fairwayLength * 0.15f, startY + widthHalf,
-	                    startX, startY);
-
-	    fairway.closePath();
-
+	    
+	    if (startX < 500) {
+	    	if (startY < 500) {
+	    		//Change random numbers
+	    		fairway.curveTo(startX, startY, startX + 500, startY + 500, startX + 600, startY + 600);
+	    		fairway.curveTo(startX + 600, startY + 600, startY + 400, startY + 400, startX + 300, startY + 300);
+	    		fairway.curveTo(startX + 300, startY + 300, startY , startY, startX, startY);
+	    	} else { 
+	    		fairway.curveTo(startX, startY, startX + 500, startY + 500, startX + 600, startY + 600);
+	    		fairway.curveTo(startX + 600, startY + 600, startY + 400, startY + 400, startX + 300, startY + 300);
+	    		fairway.curveTo(startX + 300, startY + 300, startY , startY, startX, startY);
+	    	}
+	    } else {
+	    	if (startY < 500) {
+	    		fairway.curveTo(startX, startY, startX + 500, startY + 500, startX + 600, startY + 600);
+	    		fairway.curveTo(startX + 600, startY + 600, startY + 400, startY + 400, startX + 300, startY + 300);
+	    		fairway.curveTo(startX + 300, startY + 300, startY , startY, startX, startY);
+	    	} else {
+	    		fairway.curveTo(startX, startY, startX + 500, startY + 500, startX + 600, startY + 600);
+	    		fairway.curveTo(startX + 600, startY + 600, startY + 400, startY + 400, startX + 300, startY + 300);
+	    		fairway.curveTo(startX + 300, startY + 300, startY , startY, startX, startY);
+	    	}
+	    }
+	    
 	    // Fill and draw fairway
 	    g2d.setColor(new Color(34, 139, 34)); // Forest green
 	    g2d.fill(fairway);
 	    g2d.setColor(Color.BLACK);
 	    g2d.draw(fairway);
+	    
 
-	    // Draw Tee Box ON fairway near start (inside the shape)
+	    // Draw Tee Box ON fairway near start (inside the shape)... (So start X start Y --> For green)
 	    int teeBoxWidth = 40;
 	    int teeBoxHeight = 20;
 	    g2d.setColor(Color.DARK_GRAY);
@@ -103,7 +105,7 @@ public class Hole {
 	    g2d.drawRect((int)startX - teeBoxWidth/2, (int)startY - teeBoxHeight/2, teeBoxWidth, teeBoxHeight);
 
 	    // Draw Green ON fairway near end (inside the shape)
-	    float greenX = startX + fairwayLength - 60;
+	    float greenX = startX + this.distance - 60;
 	    float greenY = startY;
 	    float greenWidth = 40f;
 	    float greenHeight = 20f;
@@ -200,7 +202,7 @@ public class Hole {
 	    g2d.fill(flag);
 	    g2d.setColor(Color.BLACK);
 	    g2d.draw(flag);
-
+	    
 	    g2d.dispose();
 	}
 

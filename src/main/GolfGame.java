@@ -14,7 +14,7 @@ public class GolfGame extends JFrame {
 
     public GolfGame() {
         setTitle("Par Pursuit Golf Simulator");
-        setSize(800, 600);
+        setSize(1000, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(new Color(21, 105, 31));
 
