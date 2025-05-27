@@ -2,34 +2,58 @@ package main;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 public class Weather {
-    private double windSpeed;  
-    // 0 to 20 mph
-    
-    private double windDirection; // 0 to 360 degrees (0 = East, 90 = North)
+    private double windSpeed;     // 0 to 20 mph
+    private double windAngle;     // in degrees, 0-360 (0 = East, 90 = North)
     private boolean isRainy;
     private boolean isWindy;
-    private double windAngle;
 
     public Weather() {
-    	windAngle = Math.random() * 360;
+        // Randomize wind speed 0 to 20 mph
         windSpeed = Math.random() * 20;
-        windDirection = Math.random() * 360;  // full circle
-        isWindy = windSpeed > 10;
-        isRainy = Math.random() < 0.3;        // 30% chance of rain
-    }
-    public double getWindAngle() {
-        return windAngle;
+
+        // Randomize wind direction angle 0 to 360 degrees
+        windAngle = Math.random() * 360;
+
+        isWindy = windSpeed > 5;  // Let's say >5 mph counts as windy
+        isRainy = Math.random() < 0.3;  // 30% chance of rain
     }
 
+    public void drawWeather(Graphics g, int width, int height) {
+        if (isWindy) {
+            g.setColor(new Color(255, 255, 255, 150)); // semi-transparent white
+            for (int i = 0; i < 50; i++) {
+                int x1 = (int) (Math.random() * width);
+                int y1 = (int) (Math.random() * height);
+                // Calculate wind vector endpoint based on angle and random length
+                double length = 10 + Math.random() * 20;
+                int x2 = (int) (x1 + length * Math.cos(Math.toRadians(windAngle)));
+                int y2 = (int) (y1 - length * Math.sin(Math.toRadians(windAngle))); // minus because y-axis down
+
+                g.drawLine(x1, y1, x2, y2);
+            }
+        }
+
+        if (isRainy) {
+            g.setColor(new Color(0, 0, 255, 150)); // semi-transparent blue
+            for (int i = 0; i < 200; i++) {
+                int x = (int) (Math.random() * width);
+                int y = (int) (Math.random() * height);
+                int size = 1 + (int) (Math.random() * 3);
+                g.fillOval(x, y, size, size * 2);
+            }
+        }
+    }
+
+    // Wind speed getter
     public double getWindSpeed() {
         return windSpeed;
     }
 
-    public double getWindDirection() {
-        return windDirection;
+    // Wind angle getter (0-360 degrees)
+    public double getWindAngle() {
+        return windAngle;
     }
 
     public boolean isRainy() {
@@ -40,35 +64,12 @@ public class Weather {
         return isWindy;
     }
 
-    public void drawWeather(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-
-        if (isWindy) {
-            g2d.setColor(new Color(255, 255, 255, 100)); // translucent white for wind
-            for (int i = 0; i < 50; i++) {
-                int x1 = (int)(Math.random() * 800);
-                int y1 = (int)(Math.random() * 1000);
-                // wind pushes lines horizontally roughly in windDirection angle
-
-                // Convert wind direction to vector
-                double rad = Math.toRadians(windDirection);
-                int length = 20;
-                int x2 = (int)(x1 + length * Math.cos(rad));
-                int y2 = (int)(y1 - length * Math.sin(rad)); // minus because y-axis downwards in screen coords
-
-                g2d.drawLine(x1, y1, x2, y2);
-            }
-        }
-
-        if (isRainy) {
-            g2d.setColor(new Color(0, 191, 255, 150));  // translucent blue rain drops
-            for (int i = 0; i < 200; i++) {
-                int x = (int)(Math.random() * 800);
-                int y = (int)(Math.random() * 1000);
-                int width = 2 + (int)(Math.random() * 2);
-                int height = 8 + (int)(Math.random() * 5);
-                g2d.fillOval(x, y, width, height);
-            }
-        }
+    /**
+     * Returns wind effect multiplier for shot distance reduction or deflection,
+     * e.g., based on windSpeed and maybe angle relative to shot direction.
+     * For now, simple: windSpeed * factor.
+     */
+    public double getWindEffect() {
+        return windSpeed * 2;  // arbitrary scaling factor
     }
 }

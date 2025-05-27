@@ -268,4 +268,7 @@ public class Hole {
 		}
 		return false;
 	}
+	public Weather getWeather() {
+        return weather;
+    }
 }
