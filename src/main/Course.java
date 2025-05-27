@@ -8,6 +8,8 @@ import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 
 public class Course {
+	//Hole Drawing List
+	private ArrayList<GeneralPath> holeDrawings;
     // List of holes in this course
     private ArrayList<Hole> holes;
     // Current weather affecting the course
@@ -77,8 +79,66 @@ public class Course {
         }
     }
     
-    public void drawCourse() {
-    	
+    public void drawCourse(Graphics g) {
+        if (holeDrawings == null || holeDrawings.isEmpty()) return;
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        int panelWidth = 800;
+        int panelHeight = 500;
+        int padding = 20;
+
+        int numHoles = holeDrawings.size();
+
+        // Choose grid layout based on number of holes
+        int cols, rows;
+        if (numHoles == 9) {
+            cols = 3;
+            rows = 3;
+        } else if (numHoles == 18) {
+            cols = 6;
+            rows = 3;
+        } else {
+            cols = (int) Math.ceil(Math.sqrt(numHoles));
+            rows = (int) Math.ceil((double) numHoles / cols);
+        }
+
+        int cellWidth = (panelWidth - 2 * padding) / cols;
+        int cellHeight = (panelHeight - 2 * padding) / rows;
+
+        for (int i = 0; i < numHoles; i++) {
+            GeneralPath path = holeDrawings.get(i);
+
+            // Bounds of original path
+            var bounds = path.getBounds2D();
+            double scaleX = (cellWidth - 20) / bounds.getWidth();
+            double scaleY = (cellHeight - 20) / bounds.getHeight();
+            double scale = Math.min(scaleX, scaleY);
+
+            // Scale and translate path
+            GeneralPath transformed = (GeneralPath) path.clone();
+            transformed.transform(java.awt.geom.AffineTransform.getTranslateInstance(-bounds.getX(), -bounds.getY()));
+            transformed.transform(java.awt.geom.AffineTransform.getScaleInstance(scale, scale));
+
+            int col = i % cols;
+            int row = i / cols;
+            double offsetX = padding + col * cellWidth + (cellWidth - bounds.getWidth() * scale) / 2;
+            double offsetY = padding + row * cellHeight + (cellHeight - bounds.getHeight() * scale) / 2;
+
+            transformed.transform(java.awt.geom.AffineTransform.getTranslateInstance(offsetX, offsetY));
+
+            // Draw
+            g2d.setColor(Color.GREEN.darker());
+            g2d.fill(transformed);
+            g2d.setColor(Color.BLACK);
+            g2d.draw(transformed);
+
+            // Label the hole number
+            g2d.drawString("Hole " + (i + 1), (int) offsetX + 5, (int) offsetY + 15);
+        }
+
+        g2d.dispose();
     }
     // Getters and setters
     public ArrayList<Hole> getHoles() {
@@ -131,5 +191,9 @@ public class Course {
 
     public Weather getWeather() {
         return currentWeather;
+    }
+    
+    public void setholeDrawing(GeneralPath a) {
+    	holeDrawings.add(a);
     }
 }
