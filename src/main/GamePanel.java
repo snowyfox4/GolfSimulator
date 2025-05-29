@@ -68,7 +68,6 @@ public class GamePanel extends JPanel {
 
         // Draw top-down fairway and green
         hole.drawFairway(g);
-        hole.drawGreen(g);
 
         // Draw some text info
         g.setColor(Color.BLACK);
@@ -89,53 +88,77 @@ public class GamePanel extends JPanel {
    
     private void drawShotPreview(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw a rectangle area for the shot preview
-        int x = 700, y = 250, width = 150, height = 150;
-        g2d.setColor(new Color(200, 200, 255));
-        g2d.fillRect(x, y, width, height);
+        int x = 700, y = 250, width = 200, height = 180;
 
+        // Background
+        g2d.setColor(new Color(135, 206, 250)); // Sky
+        g2d.fillRect(x, y, width, height / 2);
+        g2d.setColor(new Color(34, 139, 34)); // Ground
+        g2d.fillRect(x, y + height / 2, width, height / 2);
+
+        // Labels
         g2d.setColor(Color.BLACK);
         g2d.drawRect(x, y, width, height);
-        g2d.drawString("Shot Preview", x + 30, y + 15);
+        g2d.drawString("Shot Preview", x + 50, y + 15);
 
-        // Draw a simplified "3D" golf ball trajectory arc
-        int centerX = x + width / 2;
-        int baseY = y + height - 30;
+        // Draw club and stance (simple stick-figure representation)
+        int stanceX = x + width / 2;
+        int stanceY = y + height - 20;
+        g2d.setStroke(new BasicStroke(2));
+        g2d.drawLine(stanceX, stanceY, stanceX, stanceY - 30); // body
+        g2d.drawOval(stanceX - 5, stanceY - 40, 10, 10); // head
+        g2d.drawLine(stanceX, stanceY - 20, stanceX - 10, stanceY - 10); // arm holding club
 
-        // Shot power controls arc height and length
-        int arcWidth = (int) (shotPower * 1.2);
-        int arcHeight = (int) (shotPower * 0.7);
+        // Draw club line (rotate with shot angle)
+        double angleRad = Math.toRadians(-shotAngle);
+        int clubLength = 40;
+        int clubX = (int) (stanceX + clubLength * Math.cos(angleRad));
+        int clubY = (int) (stanceY - 15 - clubLength * Math.sin(angleRad));
+        g2d.setColor(Color.DARK_GRAY);
+        g2d.drawLine(stanceX - 10, stanceY - 15, clubX, clubY);
 
-        // Adjust arc start angle based on shotAngle slider
-        int startAngle = 0;
-        int arcAngle = 180;
-
-        // Draw arc representing ball flight
+        // Power bar (oscillating effect)
+        int barX = x + 10;
+        int barY = y + 30;
+        int barHeight = 100;
+        int powerHeight = (int) (shotPower * barHeight / 100);
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.fillRect(barX, barY, 15, barHeight);
         g2d.setColor(Color.RED);
-        g2d.drawArc(centerX - arcWidth / 2, baseY - arcHeight, arcWidth, arcHeight * 2, startAngle, arcAngle);
-
-        // Draw a small circle as golf ball at the start point
-        int ballSize = 12;
-        int ballX = centerX - ballSize / 2;
-        int ballY = baseY - ballSize / 2;
-        g2d.setColor(Color.WHITE);
-        g2d.fillOval(ballX, ballY, ballSize, ballSize);
+        g2d.fillRect(barX, barY + (barHeight - powerHeight), 15, powerHeight);
         g2d.setColor(Color.BLACK);
-        g2d.drawOval(ballX, ballY, ballSize, ballSize);
+        g2d.drawRect(barX, barY, 15, barHeight);
+        g2d.drawString("Power", barX, barY - 5);
 
-        // Draw shot angle line (simple rotation indication)
+        // Angle bar (left-right control)
+        int angleBarX = x + width - 60;
+        int angleBarY = y + height - 30;
+        int angleWidth = 50;
+        int angleX = angleBarX + 25 + (int) (Math.sin(Math.toRadians(shotAngle)) * 25);
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.fillRect(angleBarX, angleBarY, angleWidth, 8);
         g2d.setColor(Color.BLUE);
-        int lineLength = 50;
-        double angleRad = Math.toRadians(-shotAngle); // negative to invert y-axis
-        int lineX = (int) (centerX + lineLength * Math.cos(angleRad));
-        int lineY = (int) (baseY - lineLength * Math.sin(angleRad));
-        g2d.drawLine(centerX, baseY, lineX, lineY);
+        g2d.fillOval(angleX - 5, angleBarY - 5, 10, 10);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("Angle", angleBarX + 5, angleBarY - 5);
 
+        // Trajectory arc
+        int arcCenterX = stanceX;
+        int baseY = stanceY - 20;
+        int arcWidth = (int) (shotPower * 1.2);
+        int arcHeight = (int) (shotPower * 0.6);
+        g2d.setColor(Color.RED);
+        g2d.drawArc(arcCenterX - arcWidth / 2, baseY - arcHeight, arcWidth, arcHeight * 2, 0, 180);
+
+        // Shot info
+        g2d.setColor(Color.BLACK);
         g2d.drawString("Power: " + shotPower, x + 10, y + height - 10);
-        g2d.drawString("Angle: " + shotAngle + "°", x + 80, y + height - 10);
+        g2d.drawString("Angle: " + shotAngle + "°", x + 100, y + height - 10);
         g2d.drawString("Club: " + selectedClub, x + 10, y + height - 30);
 
         g2d.dispose();
     }
+
 }
