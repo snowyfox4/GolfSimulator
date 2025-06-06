@@ -73,3 +73,4 @@ public class Weather {
         return windSpeed * 2;  // arbitrary scaling factor
     }
 }
+

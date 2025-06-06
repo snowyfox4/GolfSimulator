@@ -22,6 +22,7 @@ public class Course {
 	private int[] courseParList;
 	// Maybe int... but color is fine (Red, Yellow, White, Blue, Then you can just
 	// convert)
+	private GeneralPath [] course;
 	private Color difficulty;
 	private int difficultyAddedDistance;
 	// Preset pars for 9-hole and 18-hole courses
@@ -41,7 +42,7 @@ public class Course {
 		this.courseParList = new int[holeCount];
 		if (difficulty == Color.RED) 
 			difficultyAddedDistance = 0;
-		if (difficulty==Color.YELLOW)
+		if (difficulty== Color.YELLOW)
 			difficultyAddedDistance = 20;
 		if(difficulty == Color.WHITE)
 			difficultyAddedDistance = 40;
@@ -217,3 +218,5 @@ public class Course {
 		holeDrawings.add(a);
 	}
 }
+
+

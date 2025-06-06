@@ -15,6 +15,8 @@ public class GolfGame extends JFrame {
     private MainMenuPanel mainMenuPanel;
     private JPanel gamePlayPanel;
     private GamePanel gamePanel;
+    
+    
     private SidePanelView sidePanel;
 
     public GolfGame() {
@@ -33,8 +35,12 @@ public class GolfGame extends JFrame {
 
         mainMenuPanel = new MainMenuPanel(this);
         gamePanel = new GamePanel(this, course);
+        
+        
         sidePanel = new SidePanelView();
         sidePanel.setPreferredSize(new Dimension(600, 400));
+        
+        
 
         gamePlayPanel = new JPanel(new BorderLayout());
         gamePlayPanel.add(gamePanel, BorderLayout.CENTER);
@@ -42,23 +48,16 @@ public class GolfGame extends JFrame {
 
         mainPanel.add(mainMenuPanel, "MainMenu");
         mainPanel.add(gamePlayPanel, "GamePlay");
-        
+
         add(mainPanel);
         cardLayout.show(mainPanel, "MainMenu");
         setVisible(true);
     }
 
-    public void startGameWithHoles(int holes) {
-        course = new Course(holes, Color.GREEN);
-        gamePanel = new GamePanel(this, course);
-        gamePlayPanel.removeAll();
-        gamePlayPanel.add(gamePanel, BorderLayout.CENTER);
-        gamePlayPanel.add(sidePanel, BorderLayout.EAST);
+    public void startGame() {
         currentHole = 0;
         isGameOver = false;
         cardLayout.show(mainPanel, "GamePlay");
-        revalidate();
-        repaint();
     }
 
     public Course getCourse() { return course; }
@@ -75,11 +74,31 @@ public class GolfGame extends JFrame {
         }
     }
 
-    public SidePanelView getSidePanel() {
-        return sidePanel;
-    }
-
     public static void main(String[] args) {
         new GolfGame();
     }
+
+    public SidePanelView getSidePanel() {
+        return sidePanel;
+    }
+    public void startGameWithHoles(int holes) {
+        course = new Course(holes, Color.GREEN); // or set difficulty from a dropdown later
+        gamePanel = new GamePanel(this, course);
+        
+        
+        sidePanel = new SidePanelView();
+        
+        
+        gamePlayPanel.removeAll();
+        gamePlayPanel.add(gamePanel, BorderLayout.CENTER);
+        gamePlayPanel.add(sidePanel, BorderLayout.EAST);
+        currentHole = 0;
+        isGameOver = false;
+        cardLayout.show(mainPanel, "GamePlay");
+        revalidate();
+        repaint();
+    }
 }
+
+
+

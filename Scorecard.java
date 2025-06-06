@@ -97,3 +97,4 @@ public class Scorecard {
         g.drawString(String.valueOf(getTotalScore()), startX + (numHoles + 1) * cellWidth + 15, startY + 2 * cellHeight + 20);
     }
 }
+
